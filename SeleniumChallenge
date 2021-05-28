@@ -1,0 +1,49 @@
+package Testing;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class SearchGoogle {
+
+	public static void main(String[] args) {
+		
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\nandyp\\Downloads\\chromedriver.exe");
+		ChromeDriver driver = new ChromeDriver();
+		WebDriverWait wt = new WebDriverWait(driver, 10);
+		driver.get("http://www.google.com");
+		driver.findElement(By.name("q")).sendKeys("COVID-19");
+		wt.until(ExpectedConditions.visibilityOf(driver.findElement(By.name("btnK"))));
+		driver.findElement(By.name("btnK")).click();
+		
+		wt.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//span[contains(text(),'News')]"))));
+		driver.findElement(By.xpath("//span[contains(text(),'News')]")).click();
+		
+		int maindiv = driver.findElements(By.xpath("//div[@id,'rso']/div")).size();
+		ArrayList<String> ar = new ArrayList();
+		for(int i=1;i<=maindiv;i++) {
+			try {
+				String news= driver.findElement(By.xpath("//div[@id,'rso']/div["+i+"/div/div/div/div[1]/g-card/div/a/div[2]]")).getText();
+				//System.out.println(news);
+				ar.add(news);
+			}catch(Exception e) {}
+		}
+		
+		HashSet<String> hashSet = new HashSet<>(ar);
+		  
+        // printing every element in Set
+  
+        for (String value : hashSet) {
+            System.out.println(value);
+        }
+
+	}
+
+}
